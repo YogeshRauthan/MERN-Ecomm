@@ -22,6 +22,7 @@ const CommonForm = ({
   setFormData,
   onSubmit,
   buttonText,
+  isBtnDisabled,
 }) => {
   const renderInputsByComponentsType = (getControlItem) => {
     let element = null;
@@ -63,7 +64,11 @@ const CommonForm = ({
             <SelectContent className="bg-white">
               {getControlItem?.options && getControlItem?.options?.length > 0
                 ? getControlItem?.options.map((optionItem) => (
-                    <SelectItem key={optionItem?.id} value={optionItem?.id} className="hover:bg-gray-100">
+                    <SelectItem
+                      key={optionItem?.id}
+                      value={optionItem?.id}
+                      className="hover:bg-gray-100"
+                    >
                       {optionItem?.label}
                     </SelectItem>
                   ))
@@ -123,7 +128,12 @@ const CommonForm = ({
           </div>
         ))}
       </div>
-      <Button type="submit" className="shadow mt-2 w-full hover:cursor-pointer" variant="secondary">
+      <Button
+        disabled={isBtnDisabled}
+        type="submit"
+        className="shadow mt-2 w-full hover:cursor-pointer"
+        variant="secondary"
+      >
         {buttonText || "Submit"}
       </Button>
     </form>

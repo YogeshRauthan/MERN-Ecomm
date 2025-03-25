@@ -94,12 +94,10 @@ const loginUser = async (req, res) => {
 //logout
 const logoutUser = async (req, res) => {
   try {
-    res.clearCookie(
-      "token".json({
-        success: true,
-        message: "Logged out successfully!",
-      })
-    );
+    res.clearCookie("token").json({
+      success: true,
+      message: "Logged out successfully!",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
