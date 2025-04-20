@@ -8,9 +8,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
+import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
 import { ArrowUpDownIcon } from "lucide-react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import ShoppingProductTile from "./product-tile";
 
 const ShoppingListing = () => {
+  const dispatch = useDispatch();
+
+  const { productList } = useSelector((state) => state.shopProducts);
+
+  console.log("productList", productList);
+
+  //fetching list of products
+  useEffect(() => {
+    dispatch(fetchAllFilteredProducts());
+  }, [dispatch]);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 p-4 md:p-6">
       <ProductFilter />
@@ -18,10 +33,10 @@ const ShoppingListing = () => {
         <div className="p-4 border-b gap-3 flex items-center justify-between">
           <h2 className="text-lg font-bold">All Products</h2>
           <div className="flex items-center gap-3">
-            <span className="text-muted-foreground"> 10 Products</span>
+            <span className="text-muted-foreground"> {productList?.length} Products</span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button size="sm" className="felx items-center gap-1 shadow">
+                <Button size="sm" className="flex items-center gap-1 shadow">
                   <ArrowUpDownIcon className="h-4 w-4" />
                   <span>Sort By</span>
                 </Button>
@@ -29,7 +44,10 @@ const ShoppingListing = () => {
               <DropdownMenuContent align="end" className="w-[200px] bg-white">
                 <DropdownMenuRadioGroup>
                   {sortOptions.map((sortItem) => (
-                    <DropdownMenuRadioItem key={sortItem?.id}>
+                    <DropdownMenuRadioItem
+                      key={sortItem?.id}
+                      className="hover:bg-gray-200"
+                    >
                       {sortItem?.label}
                     </DropdownMenuRadioItem>
                   ))}
@@ -37,6 +55,13 @@ const ShoppingListing = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+          {
+            productList && productList.length > 0 ?
+            productList.map(productItem=> <ShoppingProductTile product={productItem} />)
+            : null
+          }
         </div>
       </div>
     </div>
