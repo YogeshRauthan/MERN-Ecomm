@@ -1,4 +1,9 @@
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { StarIcon } from "lucide-react";
 
 const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
   return (
@@ -13,15 +18,115 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
             className="aspect-square w-full object-cover"
           />
         </div>
-        <div className="grid gap-6">
+        <div className="">
           <div>
-            <h1 className="text-3xl font-extrabold">
+            <DialogTitle className="text-3xl font-extrabold">
               {" "}
               {productDetails?.title}
-            </h1>
-            <p className="text-muted-foreground">
+            </DialogTitle>
+            <p className="text-muted-foreground text-2xl my-4">
               {productDetails?.description}
             </p>
+          </div>
+          <div className="flex items-center justify-between">
+            <p
+              className={`text-3xl font-bold text-primary ${
+                productDetails?.salePrice > 0 ? "line-through" : ""
+              }`}
+            >
+              {productDetails?.price}
+            </p>
+            {productDetails?.salePrice > 0 && (
+              <p className="text-2xl font-bold text-muted-foreground">
+                ${productDetails?.salePrice}
+              </p>
+            )}
+          </div>
+          <div className="flex items-center justify-between gap-2 mt-2">
+            <div className="flex items-center gap-0.5">
+              {Array(4)
+                .fill()
+                .map((_, idx) => (
+                  <StarIcon key={idx} className="w-5 h-5 fill-amber-500" />
+                ))}
+              <span className="text-muted-foreground">(4.5)</span>
+            </div>
+          </div>
+          <div className="my-5">
+            <Button className="w-full shadow">Add to cart</Button>
+          </div>
+          <Separator className="bg-gray-200" />
+          <div className="max-h-[300px] overflow-auto">
+            <h2 className="text-xl font-bold mb-4">Reviews</h2>
+            <div className="grid gap-6">
+              <div className="flex gap-4">
+                <Avatar className="w-10 h-10 border">
+                  <AvatarFallback>SM</AvatarFallback>
+                </Avatar>
+                <div className="grid gap-1">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-bold">Yogesh</h3>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    {Array(4)
+                      .fill()
+                      .map((_, idx) => (
+                        <StarIcon
+                          key={idx}
+                          className="w-5 h-5 fill-amber-500"
+                        />
+                      ))}
+                  </div>
+                  <p className="text-muted-foreground">Awesome product</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <Avatar className="w-10 h-10 border">
+                  <AvatarFallback>SM</AvatarFallback>
+                </Avatar>
+                <div className="grid gap-1">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-bold">Yogesh</h3>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    {Array(4)
+                      .fill()
+                      .map((_, idx) => (
+                        <StarIcon
+                          key={idx}
+                          className="w-5 h-5 fill-amber-500"
+                        />
+                      ))}
+                  </div>
+                  <p className="text-muted-foreground">Awesome product</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <Avatar className="w-10 h-10 border">
+                  <AvatarFallback>SM</AvatarFallback>
+                </Avatar>
+                <div className="grid gap-1">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-bold">Yogesh</h3>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    {Array(4)
+                      .fill()
+                      .map((_, idx) => (
+                        <StarIcon
+                          key={idx}
+                          className="w-5 h-5 fill-amber-500"
+                        />
+                      ))}
+                  </div>
+                  <p className="text-muted-foreground">Awesome product</p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-6 flex gap-2">
+                <Input placeholder="Write a  review..." />
+                <Button className='shadow'>Submit</Button>
+            </div>
           </div>
         </div>
       </DialogContent>
