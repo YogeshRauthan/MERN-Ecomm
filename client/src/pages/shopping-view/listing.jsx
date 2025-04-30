@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ShoppingProductTile from "./product-tile";
 import { useSearchParams } from "react-router-dom";
 import ProductDetailsDialog from "./product-details";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 
 const createSearchParamsHelper = (filterParams) => {
   const queryParams = [];
@@ -43,6 +44,8 @@ const ShoppingListing = () => {
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
   );
+
+  const { user } = useSelector((state) => state.auth);
 
   const handleSort = (value) => {
     setSort(value);
@@ -76,7 +79,21 @@ const ShoppingListing = () => {
     dispatch(fetchProductDetails(getCurrentProductId));
   };
 
-  console.log("filters", productDetails);
+  console.log("filters");
+
+  const handleAddtoCart = (getCurrentProductId) => {
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+      }
+    });
+  };
 
   //fetching list of products
   useEffect(() => {
@@ -147,12 +164,17 @@ const ShoppingListing = () => {
                   key={productItem?._id}
                   product={productItem}
                   handleGetProductDetails={handleGetProductDetails}
+                  handleAddtoCart={handleAddtoCart}
                 />
               ))
             : null}
         </div>
       </div>
-      <ProductDetailsDialog open={openDetailsDialog} setOpen={setOpenDetailsDialog} productDetails={productDetails}/>
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 };

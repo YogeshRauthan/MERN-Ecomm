@@ -14,6 +14,8 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutUser } from "@/store/auth-slice";
+import UserCartWrapper from "./cart-wrapper";
+import { useState } from "react";
 
 const MenuItems = () => {
   return (
@@ -34,6 +36,10 @@ const MenuItems = () => {
 const HeaderRightContent = () => {
   const { user } = useSelector((state) => state.auth);
 
+  const { cartItems } = useSelector((state) => state.shopCart);
+
+  const [openCartSheet, setOpenCartSheet] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -41,15 +47,34 @@ const HeaderRightContent = () => {
     dispatch(logoutUser());
   };
 
+  console.log(">>>aaa", cartItems);
+
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4 mx-2">
-      <Button size="icon" className="shadow">
-        <ShoppingCart className="w-6 h-6" />
-        <span className="sr-only">User Cart</span>
-      </Button>
+      <Sheet
+        open={openCartSheet}
+        onOpenChange={() => setOpenCartSheet(false)}
+        className="bg-white"
+      >
+        <Button
+          size="icon"
+          className="shadow"
+          onClick={() => setOpenCartSheet(true)}
+        >
+          <ShoppingCart className="w-6 h-6" />
+          <span className="sr-only">User Cart</span>
+        </Button>
+        <UserCartWrapper
+          cartItems={
+            cartItems && cartItems.items && cartItems.items.length > 0
+              ? cartItems.items
+              : []
+          }
+        />
+      </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className='w-12'>
+          <Button className="w-12">
             <Avatar className="bg-black">
               <AvatarFallback className="bg-black text-white font-extrabold">
                 {user?.userName[0]?.toUpperCase()}
@@ -100,9 +125,9 @@ const ShoppingHeader = () => {
         <div className="hidden lg:block">
           <MenuItems />
         </div>
-          <div className="hidden lg:block">
-            <HeaderRightContent />
-          </div>
+        <div className="hidden lg:block">
+          <HeaderRightContent />
+        </div>
       </div>
     </header>
   );
