@@ -19,6 +19,7 @@ import ShoppingProductTile from "./product-tile";
 import { useSearchParams } from "react-router-dom";
 import ProductDetailsDialog from "./product-details";
 import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import { useToast } from "@/hooks/use-toast";
 
 const createSearchParamsHelper = (filterParams) => {
   const queryParams = [];
@@ -38,6 +39,8 @@ const ShoppingListing = () => {
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+
+  const { toast } = useToast();
 
   const dispatch = useDispatch();
 
@@ -91,6 +94,9 @@ const ShoppingListing = () => {
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(fetchCartItems(user?.id));
+        toast({
+          title: "Product is added to cart!",
+        });
       }
     });
   };

@@ -8,9 +8,9 @@ const UserCartWrapper = ({ cartItems }) => {
       <SheetHeader>
         <SheetTitle>Your Cart</SheetTitle>
       </SheetHeader>
-      <div className="mt-8 space-y-4">
+      <div className="mt-8 space-y-4 px-4">
         {cartItems && cartItems?.length > 0
-          ? cartItems.map((item) => <UserCartItemsContent />)
+          ? cartItems.map((item) => <UserCartItemsContent cartItem={item} />)
           : null}
       </div>
       <div className="space-y-4">
