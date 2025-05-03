@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
 import ShoppingProductTile from "./product-tile";
+import { useNavigate } from "react-router-dom";
 
 const ShoppingHome = () => {
   const slides = [bannerOne, bannerTwo, bannerThree];
@@ -16,6 +17,19 @@ const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const dispatch = useDispatch();
   const { productList } = useSelector((state) => state.shopProducts);
+  const navigate = useNavigate();
+
+  const handleNavigateToListingPage = (getCurrentItem, section) => {
+    console.log("getCurrentItem", getCurrentItem);
+
+    sessionStorage.removeItem("filters");
+    const currentFilter = {
+      [section]: [getCurrentItem?.id],
+    };
+
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate("/shop/listing/");
+  };
 
   useEffect(() => {
     dispatch(
@@ -77,7 +91,12 @@ const ShoppingHome = () => {
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {filterOptions?.category?.map((categoryItem) => (
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+              <Card
+                className="cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() =>
+                  handleNavigateToListingPage(categoryItem, "category")
+                }
+              >
                 <CardContent className="flex flex-col items-center justify-center p-6">
                   <categoryItem.icon className="w-12 h-12 mb-4 text-primary" />
                   <span className="font-bold"> {categoryItem?.label}</span>
@@ -92,7 +111,10 @@ const ShoppingHome = () => {
           <h2 className="text-3xl font-bold text-center mb-8">Shop by Brand</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {filterOptions?.brand?.map((brandItem) => (
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+              <Card
+                className="cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() => handleNavigateToListingPage(brandItem, "brand")}
+              >
                 <CardContent className="flex flex-col items-center justify-center p-6">
                   <brandItem.icon className="w-12 h-12 mb-4 text-primary" />
                   <span className="font-bold"> {brandItem?.label}</span>
