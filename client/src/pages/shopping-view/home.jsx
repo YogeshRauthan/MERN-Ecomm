@@ -6,19 +6,34 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { filterOptions } from "@/config";
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
+import ShoppingProductTile from "./product-tile";
 
 const ShoppingHome = () => {
   const slides = [bannerOne, bannerTwo, bannerThree];
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const dispatch = useDispatch();
+  const { productList } = useSelector((state) => state.shopProducts);
 
+  useEffect(() => {
+    dispatch(
+      fetchAllFilteredProducts({
+        filterParams: {},
+        sortParams: "price-lowtohigh",
+      })
+    );
+  }, [dispatch]);
+
+  //this is to automatically move the slides in banner
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % slides?.length);
     }, 3000);
 
     return () => clearInterval(timer);
-  });
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -69,6 +84,20 @@ const ShoppingHome = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Feature Products
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {productList && productList?.length > 0
+              ? productList?.map((productItem) => (
+                  <ShoppingProductTile product={productItem} />
+                ))
+              : null}
           </div>
         </div>
       </section>
