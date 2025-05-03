@@ -19,9 +19,8 @@ const ShoppingHome = () => {
   const { productList } = useSelector((state) => state.shopProducts);
   const navigate = useNavigate();
 
+  //this will navigate to listing page with filter added category/brand
   const handleNavigateToListingPage = (getCurrentItem, section) => {
-    console.log("getCurrentItem", getCurrentItem);
-
     sessionStorage.removeItem("filters");
     const currentFilter = {
       [section]: [getCurrentItem?.id],
@@ -92,6 +91,7 @@ const ShoppingHome = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {filterOptions?.category?.map((categoryItem) => (
               <Card
+                key={categoryItem?.id}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
                 onClick={() =>
                   handleNavigateToListingPage(categoryItem, "category")
@@ -112,6 +112,7 @@ const ShoppingHome = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {filterOptions?.brand?.map((brandItem) => (
               <Card
+                key={brandItem?.id}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
                 onClick={() => handleNavigateToListingPage(brandItem, "brand")}
               >
@@ -131,8 +132,8 @@ const ShoppingHome = () => {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {productList && productList?.length > 0
-              ? productList?.map((productItem) => (
-                  <ShoppingProductTile product={productItem} />
+              ? productList?.map((productItem, idx) => (
+                  <ShoppingProductTile key={idx} product={productItem} />
                 ))
               : null}
           </div>
