@@ -1,7 +1,8 @@
 import { Minus, Plus, Trash } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCartItem } from "@/store/shop/cart-slice";
+import { deleteCartItem, updateCartQuantity } from "@/store/shop/cart-slice";
+import { useToast } from "@/hooks/use-toast";
 
 const UserCartItemsContent = ({ cartItem }) => {
   console.log("img", cartItem);
@@ -9,11 +10,37 @@ const UserCartItemsContent = ({ cartItem }) => {
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
+  const { toast } = useToast();
 
   const handleCartItemDelete = (getCartItem) => {
     dispatch(
       deleteCartItem({ userId: user?.id, productId: getCartItem?.productId })
-    );
+    ).then((data) => {
+      if (data?.payload?.success) {
+        toast({
+          title: "Cart item deleted successfully!",
+        });
+      }
+    });
+  };
+
+  const handleUpdateQuantity = (getCartItem, typeOfAction) => {
+    dispatch(
+      updateCartQuantity({
+        userId: user?.id,
+        productId: getCartItem?.productId,
+        quantity:
+          typeOfAction === "plus"
+            ? getCartItem?.quantity + 1
+            : getCartItem?.quantity - 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        toast({
+          title: "Cart item updated successfully!",
+        });
+      }
+    });
   };
 
   return (
@@ -26,12 +53,21 @@ const UserCartItemsContent = ({ cartItem }) => {
       <div className="flex-1">
         <h3 className="font-extrabold">{cartItem?.title}</h3>
         <div className="flex items-center mt-1 gap-2">
-          <Button size="icon" className="shadow h-8 w-8 rounded-full">
+          <Button
+            size="icon"
+            className="shadow h-8 w-8 rounded-full"
+            onClick={() => handleUpdateQuantity(cartItem, "minus")}
+            disabled={cartItem?.quantity === 1}
+          >
             <Minus className="w-4 h-4" />
             <span className="sr-only">Decrease</span>
           </Button>
           <span className="font-semibold">{cartItem?.quantity}</span>
-          <Button size="icon" className="shadow h-8 w-8 rounded-full">
+          <Button
+            size="icon"
+            className="shadow h-8 w-8 rounded-full"
+            onClick={() => handleUpdateQuantity(cartItem, "plus")}
+          >
             <Plus className="w-4 h-4" />
             <span className="sr-only">Increase</span>
           </Button>

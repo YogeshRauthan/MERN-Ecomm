@@ -3,11 +3,44 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import { setProductDetails } from "@/store/shop/products-slice";
 import { StarIcon } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.auth);
+
+  const { toast } = useToast();
+
+  const handleAddtoCart = (getCurrentProductId) => {
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({
+          title: "Product is added to cart!",
+        });
+      }
+    });
+  };
+
+  //when we closed the modal and switch page and come back it automatically opens so this prevents that behavioor
+  const handleDialogClose = () => {
+    setOpen(false);
+    dispatch(setProductDetails());
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleDialogClose}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] bg-white">
         <div className="relative overflow-hidden rounded-lg">
           <img
@@ -53,7 +86,12 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
             </div>
           </div>
           <div className="my-5">
-            <Button className="w-full shadow">Add to cart</Button>
+            <Button
+              className="w-full shadow"
+              onClick={() => handleAddtoCart(productDetails?._id)}
+            >
+              Add to cart
+            </Button>
           </div>
           <Separator className="bg-gray-200" />
           <div className="max-h-[300px] overflow-auto">
@@ -124,8 +162,8 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
               </div>
             </div>
             <div className="mt-6 flex gap-2">
-                <Input placeholder="Write a  review..." />
-                <Button className='shadow'>Submit</Button>
+              <Input placeholder="Write a  review..." />
+              <Button className="shadow">Submit</Button>
             </div>
           </div>
         </div>
