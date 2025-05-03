@@ -1,4 +1,13 @@
-import { AlarmClockPlus, LayoutDashboard, ShoppingBasket } from "lucide-react";
+import {
+  AlarmClockPlus,
+  BabyIcon,
+  CloudLightning,
+  FootprintsIcon,
+  LayoutDashboard,
+  ShirtIcon,
+  ShoppingBasket,
+  WatchIcon,
+} from "lucide-react";
 
 export const registerFormControl = [
   {
@@ -165,11 +174,11 @@ export const brandOptionsMap = {
 
 export const filterOptions = {
   category: [
-    { id: "men", label: "Men" },
-    { id: "women", label: "Women" },
-    { id: "kids", label: "Kids" },
-    { id: "accessories", label: "Accessories" },
-    { id: "footwear", label: "Footwear" },
+    { id: "men", label: "Men", icon: ShirtIcon },
+    { id: "women", label: "Women", icon: CloudLightning },
+    { id: "kids", label: "Kids", icon: BabyIcon },
+    { id: "accessories", label: "Accessories", icon: WatchIcon },
+    { id: "footwear", label: "Footwear", icon: FootprintsIcon },
   ],
   brand: [
     { id: "nike", label: "Nike" },
