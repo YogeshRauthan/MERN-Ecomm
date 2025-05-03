@@ -1,12 +1,18 @@
 import {
   AlarmClockPlus,
   BabyIcon,
+  ChartNoAxesColumnIncreasingIcon,
+  CheckIcon,
   CloudLightning,
   FootprintsIcon,
+  HeadingIcon,
   LayoutDashboard,
+  RabbitIcon,
   ShirtIcon,
   ShoppingBasket,
+  SwatchBookIcon,
   WatchIcon,
+  ZapIcon,
 } from "lucide-react";
 
 export const registerFormControl = [
@@ -181,12 +187,12 @@ export const filterOptions = {
     { id: "footwear", label: "Footwear", icon: FootprintsIcon },
   ],
   brand: [
-    { id: "nike", label: "Nike" },
-    { id: "adidas", label: "Adidas" },
-    { id: "puma", label: "Puma" },
-    { id: "levi", label: "Levi's" },
-    { id: "zara", label: "Zara" },
-    { id: "h&m", label: "H&M" },
+    { id: "nike", label: "Nike", icon: CheckIcon },
+    { id: "adidas", label: "Adidas", icon: ChartNoAxesColumnIncreasingIcon },
+    { id: "puma", label: "Puma", icon: RabbitIcon },
+    { id: "levi", label: "Levi's", icon: SwatchBookIcon },
+    { id: "zara", label: "Zara", icon: ZapIcon },
+    { id: "h&m", label: "H&M", icon: HeadingIcon },
   ],
 };
 
