@@ -5,9 +5,20 @@ import bannerThree from "../../assets/banner-3.webp";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { filterOptions } from "@/config";
 import { Card, CardContent } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 
 const ShoppingHome = () => {
   const slides = [bannerOne, bannerTwo, bannerThree];
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides?.length);
+    }, 3000);
+
+    return () => clearInterval(timer);
+  });
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -16,18 +27,30 @@ const ShoppingHome = () => {
           <img
             src={slide}
             key={index}
-            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
+            className={`${
+              index === currentSlide ? "opacity-100" : "opacity-0"
+            } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
           />
         ))}
         <Button
           className="shadow absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80"
           size="icon"
+          onClick={() =>
+            setCurrentSlide(
+              (prevSlide) => (prevSlide - 1 + slides?.length) % slides?.length
+            )
+          }
         >
           <ChevronLeftIcon className="h-4 w-4" />
         </Button>
         <Button
           className="shadow absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80"
           size="icon"
+          onClick={() =>
+            setCurrentSlide(
+              (prevSlide) => (prevSlide + 1 + slides?.length) % slides?.length
+            )
+          }
         >
           <ChevronRightIcon className="h-4 w-4" />
         </Button>
